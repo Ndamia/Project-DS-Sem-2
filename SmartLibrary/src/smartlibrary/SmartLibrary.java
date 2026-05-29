@@ -11,26 +11,54 @@ package smartlibrary;
 import java.util.Scanner;
 
 public class SmartLibrary implements LibraryADT {
+    private BookBST catalogue = new BookBST();
+    private BorrowStack history = new BorrowStack();
+    
     public SmartLibrary() {
-        
+     
     }
-    public void addBook(int isbn, String title, String author){
-        System.out.println("will add later");
+    @Override
+    public void addBook(Book Book){
+        catalogue.insert(Book.getIsbn(), Book.getTitle(), Book.getAuthor());
+        System.out.println("\nSuccessfully added " + Book.getTitle() + "to the library catalogue.");
     }
+    @Override
     public void searchBook(int isbn){
-        System.out.println("will add later");
+        System.out.println("\nSearching catalogue tree for ISBN " + isbn + "...");
+        Book foundBook = catalogue.search(isbn);
+        
+        if(foundBook != null){
+            System.out.println("Result: [FOUND]");
+            System.out.println("foundBook.toString()");
+        } else {
+            System.out.println("Result: [NOT FOUND]");
+        }
     }
+    @Override
     public void borrowBook(int isbn){
-        System.out.println("will add later");
+        System.out.println("\nChecking item availability for ISBN " + isbn + "...");
+        Book targetBook = catalogue.search(isbn);
+        
+        if(targetBook != null){
+            if(targetBook.isBorrowed()){
+                System.out.println("Error: " + targetBook.getTitle() + " is already checked out.");
+            } else {
+                targetBook.setBorrowed(true);
+                history.push(targetBook);
+                System.out.println("Success: You have borrowed " + targetBook.getTitle());
+            }
+        } else {
+            System.out.println("Error: Target ISBN does not exist in our reference system.");
+        }
     }
-    public void viewLatestHistory(){
-        System.out.println("will add later");
+    public void viewHistory(){
+        history.show();
     }
     public void runMenu(){
         Scanner sc = new Scanner(System.in);
         while(true){
             printMenu();
-            System.out.println("Choice: ");
+            System.out.print("Choice: ");
             
             if(!sc.hasNextInt()){
                 System.out.println("Error: Invalid input");
@@ -71,7 +99,9 @@ public class SmartLibrary implements LibraryADT {
                 String title = sc.nextLine();
                 System.out.print("Enter Author: ");
                 String author = sc.nextLine();
-                addBook(isbn, title, author);
+                
+                Book newBook = new Book(isbn, title, author);
+                addBook(newBook);
             }
             case 2 -> {
                 System.out.print("Enter ISBN to search: ");
@@ -91,7 +121,7 @@ public class SmartLibrary implements LibraryADT {
                 int borrowIsbn = sc.nextInt();
                 borrowBook(borrowIsbn);
             }
-            case 4 -> viewLatestHistory();
+            case 4 -> viewHistory();
         }
     }
 }
