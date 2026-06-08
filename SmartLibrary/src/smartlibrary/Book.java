@@ -3,12 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package smartlibrary;
-
+import java.io.Serializable;
 /**
  *
  * @author Nur Hasna Nadirah
  */
-public class Book {
+public class Book implements Serializable {
     private int isbn;
     private String title;
     private String author;
