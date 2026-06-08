@@ -25,4 +25,26 @@ public class BookBST {
         
         return r;
     }
+    
+    public Book search(int isbn) {
+        return sea(root, isbn); 
+    }
+
+    /**
+     * Private helper utilizing strict recursion.
+     * Traverses the tree with O(log n) efficiency.
+     */
+    private Book sea(Book r, int isbn) {
+        // BASE CASE 1 & 2: If node is empty (not found) or matches target ISBN
+        if (r == null || r.getIsbn() == isbn) {
+            return r;
+        }
+        
+        // RECURSIVE STEP: Decide whether to move left or right down the tree
+        if (isbn < r.getIsbn()) {
+            return sea(r.left, isbn); // Strict recursive call to left child
+        } else {
+            return sea(r.right, isbn); // Strict recursive call to right child
+        }
+    }
 }
