@@ -15,12 +15,12 @@ public class SmartLibrary implements LibraryADT {
     private BorrowStack history = new BorrowStack();
     
     public SmartLibrary() {
-     
+        history.loadFromFile();
     }
     @Override
     public void addBook(Book Book){
         catalogue.insert(Book.getIsbn(), Book.getTitle(), Book.getAuthor());
-        System.out.println("\nSuccessfully added " + Book.getTitle() + "to the library catalogue.");
+        System.out.println("\nSuccessfully added " + Book.getTitle() + " to the library catalogue.");
     }
     @Override
     public void searchBook(int isbn){
@@ -29,7 +29,12 @@ public class SmartLibrary implements LibraryADT {
         
         if(foundBook != null){
             System.out.println("Result: [FOUND]");
-            System.out.println("foundBook.toString()");
+            System.out.println("--------------------------------");
+            System.out.println("ISBN   : " + foundBook.getIsbn());
+            System.out.println("Title  : " + foundBook.getTitle());
+            System.out.println("Author : " + foundBook.getAuthor());
+            System.out.println("Status : " + (foundBook.isBorrowed() ? "Borrowed" : "Available"));
+            System.out.println("--------------------------------");
         } else {
             System.out.println("Result: [NOT FOUND]");
         }
@@ -69,7 +74,8 @@ public class SmartLibrary implements LibraryADT {
             sc.nextLine();
             
             if(choice == 5){
-                System.out.println("Exiting Smart Library System. Goodbye!");
+                System.out.println("Saving data and exiting Smart Library System. Goodbye!");
+                history.saveToFile();
                 break;
             }
             handleChoice(choice, sc);
@@ -87,13 +93,18 @@ public class SmartLibrary implements LibraryADT {
     private void handleChoice(int choice, Scanner sc){
         switch(choice){
             case 1 -> {
-                System.out.print("Enter ISBN: ");
-                while(!sc.hasNextInt()){
-                    System.out.println("Error. Try again");
-                    sc.next();
+                int isbn = 0;
+                while(true){
+                    try {
+                        System.out.print("Enter ISBN: ");
+                        isbn = sc.nextInt();
+                        sc.nextLine();
+                        break;
+                    } catch(Exception e) {
+                        System.out.println("Error: Invalid input. Try again");
+                        sc.nextLine();
+                    }
                 }
-                int isbn = sc.nextInt();
-                sc.nextLine();
                 
                 System.out.print("Enter Title: ");
                 String title = sc.nextLine();
@@ -104,21 +115,33 @@ public class SmartLibrary implements LibraryADT {
                 addBook(newBook);
             }
             case 2 -> {
-                System.out.print("Enter ISBN to search: ");
-                while(!sc.hasNextInt()){
-                    System.out.println("Error. Try again");
-                    sc.next();
+                int searchIsbn = 0;
+                while(true){
+                    try {
+                        System.out.print("Enter ISBN to search: ");
+                        searchIsbn = sc.nextInt();
+                        sc.nextLine();
+                        break;
+                    } catch(Exception e) {
+                        System.out.println("Error: Invalid input. Try again");
+                        sc.nextLine();
+                    }
                 }
-                int searchIsbn = sc.nextInt();
                 searchBook(searchIsbn);
             }
             case 3 -> {
-                System.out.print("Enter ISBN to borrow: ");
-                while(!sc.hasNextInt()){
-                    System.out.println("Error. Try again");
-                    sc.next();
+                int borrowIsbn = 0;
+                while(true){
+                    try {
+                        System.out.print("Enter ISBN to borrow: ");
+                        borrowIsbn = sc.nextInt();
+                        sc.nextLine();
+                        break;
+                    } catch(Exception e) {
+                        System.out.println("Error: Invalid input. Try again");
+                        sc.nextLine();
+                    }
                 }
-                int borrowIsbn = sc.nextInt();
                 borrowBook(borrowIsbn);
             }
             case 4 -> viewHistory();
