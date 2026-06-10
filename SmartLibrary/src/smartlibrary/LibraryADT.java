@@ -13,6 +13,8 @@ public interface LibraryADT {
     
     void searchBook(int isbn);
     
+    void returnBook(int isbn);
+    
     void borrowBook(int isbn);
     
     void viewHistory();
