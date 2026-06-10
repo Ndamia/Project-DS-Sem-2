@@ -26,7 +26,7 @@ public class SmartLibrary implements LibraryADT {
     public void searchBook(int isbn){
         System.out.println("\nSearching catalogue tree for ISBN " + isbn + "...");
         Book foundBook = catalogue.search(isbn);
-        
+       // i did chech for exception control here. exceptoon already implemented 
         if(foundBook != null){
             System.out.println("Result: [FOUND]");
             System.out.println("--------------------------------");
@@ -36,7 +36,7 @@ public class SmartLibrary implements LibraryADT {
             System.out.println("Status : " + (foundBook.isBorrowed() ? "Borrowed" : "Available"));
             System.out.println("--------------------------------");
         } else {
-            System.out.println("Result: [NOT FOUND]");
+            System.out.println("ERROR: Book with ISBN not found");  
         }
     }
     @Override
