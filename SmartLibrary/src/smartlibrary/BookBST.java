@@ -82,9 +82,7 @@ public class BookBST {
         }
     }
     
-    public void displayAllBooks(){
-        inorder(root);
-    }
+    
     private void inorder(Book node){
         if(node != null){
             inorder(node.left);
