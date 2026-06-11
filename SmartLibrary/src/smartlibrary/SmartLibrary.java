@@ -41,10 +41,36 @@ public class SmartLibrary implements LibraryADT {
         }
     }
     public void searchBookByTitle(String title){
-        catalogue.searchByTitle(title);
+        System.out.println("\nSearching " + title + "...");
+        Book foundBook = catalogue.searchByTitle(title);
+       // i did chech for exception control here. exceptoon already implemented 
+        if(foundBook != null){
+            System.out.println("Result: [FOUND]");
+            System.out.println("--------------------------------");
+            System.out.println("ISBN   : " + foundBook.getIsbn());
+            System.out.println("Title  : " + foundBook.getTitle());
+            System.out.println("Author : " + foundBook.getAuthor());
+            System.out.println("Status : " + (foundBook.isBorrowed() ? "Borrowed" : "Available"));
+            System.out.println("--------------------------------");
+        } else {
+            System.out.println("ERROR: Book with title not found");  
+        }
     }
     public void searchBookByAuthor(String author){
-        catalogue.searchByAuthor(author);
+        System.out.println("\nSearching " + author + "...");
+        Book foundBook = catalogue.searchByAuthor(author);
+       // i did chech for exception control here. exceptoon already implemented 
+        if(foundBook != null){
+            System.out.println("Result: [FOUND]");
+            System.out.println("--------------------------------");
+            System.out.println("ISBN   : " + foundBook.getIsbn());
+            System.out.println("Title  : " + foundBook.getTitle());
+            System.out.println("Author : " + foundBook.getAuthor());
+            System.out.println("Status : " + (foundBook.isBorrowed() ? "Borrowed" : "Available"));
+            System.out.println("--------------------------------");
+        } else {
+            System.out.println("ERROR: Book with title not found");  
+        }
     }
     @Override
     public void borrowBook(int isbn){
@@ -122,20 +148,16 @@ public class SmartLibrary implements LibraryADT {
     }
     private void handleChoice(int choice, Scanner sc){
         switch(choice){
-            case 1 -> {
-                int isbn = 0;
-                while(true){
-                    try {
-                        System.out.print("Enter ISBN: ");
-                        isbn = sc.nextInt();
-                        sc.nextLine();
-                        break;
-                    } catch(Exception e) {
-                        System.out.println("Error: Invalid input. Try again");
-                        sc.nextLine();
-                    }
+            case 1:
+                System.out.print("Enter ISBN (Integer):");
+                while (!sc.hasNextInt()) {
+                    System.out.println("Invalid ISBN format.");
+                    sc.next();
+                    System.out.print("Enter ISBN (Integer): ");
                 }
                 
+                int isbn = sc.nextInt();
+                sc.nextLine();
                 System.out.print("Enter Title: ");
                 String title = sc.nextLine();
                 System.out.print("Enter Author: ");
@@ -143,83 +165,87 @@ public class SmartLibrary implements LibraryADT {
                 
                 Book newBook = new Book(isbn, title, author);
                 addBook(newBook);
-            }
-            case 2 -> {
-                int searchIsbn = 0;
-                while(true){
-                    try {
-                        System.out.print("Enter ISBN to search: ");
-                        searchIsbn = sc.nextInt();
-                        sc.nextLine();
-                        break;
-                    } catch(Exception e) {
-                        System.out.println("Error: Invalid input. Try again");
-                        sc.nextLine();
-                    }
+                break;
+                
+            case 2:
+                System.out.print("Enter ISBN to search: ");
+                while (!sc.hasNextInt()) {
+                    System.out.println("Invalid ISBN format.");
+                    sc.next();
+                    System.out.print("Enter ISBN to search: ");
                 }
-                searchBook(searchIsbn);
-            }
-            case 3 -> {
-                String title = "";
-                while(true){
-                    System.out.print("Enter title to search: ");
-                    title = sc.nextLine();
-                    
-                    if(title.trim().isEmpty()){
-                        System.out.println("Error: Title cannot be empty. Try again");
-                    } else {
-                        break;
-                    }
+                
+                int validIsbn = sc.nextInt();
+                sc.nextLine();
+                searchBook(validIsbn); 
+                break;
+                
+            case 3:
+                System.out.print("Enter book title to search: ");
+                while (!sc.hasNextLine()) {
+                    System.out.println("Invalid book title name.");
+                    sc.next();
+                    System.out.print("Enter book title to search: ");
                 }
-                searchBookByTitle(title);
-            }
-            case 4 -> {
-                String author = "";
-                while(true){
-                    System.out.print("Enter author to search: ");
-                    author = sc.nextLine();
-                    
-                    if(author.trim().isEmpty()){
-                        System.out.println("Error: Author cannot be empty. Try again");
-                    } else {
-                        break;
-                    }
+                
+                String bookTitle = sc.nextLine();
+                if(bookTitle.trim().isEmpty()){
+                    System.out.println("Title cannot be empty.");
+                    break;
                 }
-                searchBookByAuthor(author);
-            }
-            case 5 -> {
-                int borrowIsbn = 0;
-                while(true){
-                    try {
-                        System.out.print("Enter ISBN to borrow: ");
-                        borrowIsbn = sc.nextInt();
-                        sc.nextLine();
-                        break;
-                    } catch(Exception e) {
-                        System.out.println("Error: Invalid input. Try again");
-                        sc.nextLine();
-                    }
+                searchBookByTitle(bookTitle);; 
+                break;
+                
+            case 4:
+                System.out.print("Enter book author to search: ");
+                while (!sc.hasNextLine()) {
+                    System.out.println("Invalid book author name.");
+                    sc.next();
+                    System.out.print("Enter book author to search: ");
                 }
+                
+                String bookAuthor = sc.nextLine();
+                if(bookAuthor.trim().isEmpty()){
+                    System.out.println("Author cannot be empty.");
+                    break;
+                }
+                searchBookByAuthor(bookAuthor);
+                break;
+
+            case 5:
+                System.out.print("Enter ISBN to borrow: ");
+                while (!sc.hasNextInt()) {
+                    System.out.println("Invalid ISBN format.");
+                    sc.next();
+                    System.out.print("Enter ISBN to borrow: ");
+                }
+                int borrowIsbn = sc.nextInt();
+                sc.nextLine();
                 borrowBook(borrowIsbn);
-            }
-            case 6 -> {
-                int returnIsbn = 0;
-                while(true){
-                    try {
-                        System.out.print("Enter ISBN to return: ");
-                        returnIsbn = sc.nextInt();
-                        sc.nextLine();
-                        break;
-                    } catch(Exception e) {
-                        System.out.println("Error: Invalid input. Try again");
-                        sc.nextLine();
-                    }
+                break;
+                
+            case 6:
+                System.out.print("Enter ISBN to return: ");
+                while (!sc.hasNextInt()) {
+                    System.out.println("Invalid ISBN format.");
+                    sc.next();
+                    System.out.print("Enter ISBN to return: ");
                 }
+                int returnIsbn = sc.nextInt();
+                sc.nextLine();
                 returnBook(returnIsbn);
-            }
-            case 7 -> viewHistory();
+                break;
+                
+            case 7:
+                viewHistory();
+                break;
             
-            case 8 -> viewAllBooks();
+            case 8:
+                viewAllBooks();
+                break;
+
+            default:
+                System.out.println("Invalid option. Please choose 1-9.");
         }
     }
 }
