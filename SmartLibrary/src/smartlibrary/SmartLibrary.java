@@ -20,13 +20,8 @@ public class SmartLibrary implements LibraryADT {
     }
     @Override
     public void addBook(Book Book){
-        Book duplicateBook = catalogue.search(Book.getIsbn());
-        if(duplicateBook != null){
-            System.out.println("\nError: Cannot add book. ISBN " + Book.getIsbn() + " already exist (" + duplicateBook.getTitle());
-        } else {
         catalogue.insert(Book.getIsbn(), Book.getTitle(), Book.getAuthor());
         System.out.println("\nSuccessfully added " + Book.getTitle() + " to the library catalogue.");
-        }
     }
     @Override
     public void searchBook(int isbn){
@@ -163,6 +158,11 @@ public class SmartLibrary implements LibraryADT {
                 
                 int isbn = sc.nextInt();
                 sc.nextLine();
+                Book duplicateBook = catalogue.search(isbn);
+                if(duplicateBook != null){
+                    System.out.println("\nError: Cannot add book. ISBN " + isbn + " already exist (" + duplicateBook.getTitle());
+                    break;
+                }
                 System.out.print("Enter Title: ");
                 String title = sc.nextLine();
                 System.out.print("Enter Author: ");
