@@ -56,30 +56,38 @@ public class BookBST {
         }
     }
     
-    public void searchByTitle(String title){
-        searchTitle(root, title);
+    public Book searchByTitle(String title){
+        return searchTitle(root, title);
     }
-    private void searchTitle(Book node, String title){
-        if(node != null){
-            searchTitle(node.left, title);
-            if(node.getTitle().equalsIgnoreCase(title)){
-                System.out.println(node);
-            }
-            searchTitle(node.right, title);
+    private Book searchTitle(Book node, String title){
+        if(node == null){
+            return null;
         }
+        if(node.getTitle().equalsIgnoreCase(title)){
+            return node;
+        }
+        Book found = searchTitle(node.left, title);
+        if(found != null){
+            return found;
+        }
+        return searchTitle(node.right, title);
     }
     
-    public void searchByAuthor(String author){
-        searchAuthor(root, author);
+    public Book searchByAuthor(String author){
+        return searchAuthor(root, author);
     }
-    private void searchAuthor(Book node, String author){
-        if(node != null){
-            searchAuthor(node.left, author);
-            if(node.getAuthor().equalsIgnoreCase(author)){
-                System.out.println(node);
-            }
-            searchAuthor(node.right, author);
+    private Book searchAuthor(Book node, String author){
+        if(node == null){
+            return null;
         }
+        if(node.getAuthor().equalsIgnoreCase(author)){
+            return node;
+        }
+        Book found = searchAuthor(node.left, author);
+        if(found != null){
+            return found;
+        }
+        return searchAuthor(node.right, author);
     }
     
     public void displayAllBooks(){
