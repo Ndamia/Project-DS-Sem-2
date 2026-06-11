@@ -69,7 +69,7 @@ public class SmartLibrary implements LibraryADT {
             System.out.println("Status : " + (foundBook.isBorrowed() ? "Borrowed" : "Available"));
             System.out.println("--------------------------------");
         } else {
-            System.out.println("ERROR: Book with title not found");  
+            System.out.println("ERROR: Book with author not found");  
         }
     }
     @Override
